@@ -17,8 +17,12 @@ async def lifespan(app: FastAPI):
     """Application lifespan - startup and shutdown events."""
     # Startup
     print("🚀 Starting ClaimGuard AI...")
-    await init_db()
-    print("✅ Database initialized")
+    try:
+        await init_db()
+        print("✅ Database initialized")
+    except Exception as e:
+        print(f"⚠️ Database init skipped (tables may already exist): {e}")
+        print("💡 Make sure your DATABASE_URL is correct and Supabase is accessible")
     yield
     # Shutdown
     print("👋 Shutting down ClaimGuard AI...")
